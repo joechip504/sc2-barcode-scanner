@@ -12,11 +12,16 @@ class ReplayParser(object):
 	Error validating replay - {} 
 	Must be 2 player LOTV replay
 	'''
+
+	CONTROL_GROUP_EVENTS = (
+		'SetControlGroupEvent', 
+		'GetControlGroupEvent', 
+		'AddToControlGroupEvent'
+		)
 	
 	def __init__(self):
 		self.logger = logging.getLogger('ReplayParser')
 		self.logger.setLevel(logging.DEBUG)
-		self.sha1_id = None
 
 	def validate_replay(self, replay):
 		'''
@@ -26,17 +31,27 @@ class ReplayParser(object):
 			len(replay.players) == 2, 
 			))
 
-	def extract_hotkey_info(self, replay, player_id):
-		pass
+	def extract_hotkey_info(self, replay, player):
+		hotkey_data = [0] * 10
 
-	def extract_player_info(self, replay, player_id):
-		pass
+		control_group_events = [
+			event for event in replay.events if (
+			event.name in self.CONTROL_GROUP_EVENTS and
+			player.uid == event.pid
+			)]
 
-	def get_replay(self, replay_file_path):
-		"""
-		"""
+		for event in control_group_events:
+			hotkey_data[event.control_group] += 1
+
+		for i in range(len(hotkey_data)):
+			hotkey_data[i] /= replay.length.mins
+			hotkey_data[i] = int(hotkey_data[i])
+
+		return hotkey_data
+
+	def load_replay(self, replay_file_path):
 		try:
-			replay = sc2reader.load_replay(replay_file_path)
+			replay = sc2reader.load_replay(replay_file_path, load_level = 4)
 		except Exception as e:
 			self.logger.warning(self.WARNING_SC2READER_LOAD.format(replay_file_path, str(e)))
 			return None
@@ -46,6 +61,7 @@ class ReplayParser(object):
 			return None
 
 		self.logger.info('Parsing - {}'.format(replay.filename))
+		return replay
 		
 
 if __name__ == '__main__':
