@@ -23,7 +23,7 @@ def home(request):
 		form = UploadFileForm()
 
 	return render_to_response(
-		'main/index.html', 
+		'main/index_results.html', 
 		{'form' : form}, 
 		context_instance = RequestContext(request)
 		)
