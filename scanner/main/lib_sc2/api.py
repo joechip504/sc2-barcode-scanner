@@ -34,25 +34,55 @@ class SC2BarcodeScannerAPI(object):
 		self.tree = ReplayKDTree(self.tree_nodes)
 
 	def guess_from_ladder_replay(self, replay_file_path):
-		pass
+		'''
+		Open the replay and guess the identity of both players.
+		{
+			'player1_name' : [(.918, 'Huk'), (.771, 'CranK'), ...], 
+			'player2_name' : [(.555, 'Jobama'), (.412, 'sPringle'), ...], 
+		}
+		'''
+		replay = self.parser.load_replay(replay_file_path)
+		neighbors = {}
+		if not replay:
+			return neighbors
 
+		for player in replay.players:
+			hotkey_info = self.parser.extract_hotkey_info(replay, player)
+			node_kwargs = {
+			'player_name' : player.name, 
+			'player_race' : player.play_race,
+			'hotkey_info' : hotkey_info,
+			}
+			node 	   = Node(**node_kwargs)
+			candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5)]
+
+			def gaussian(v1, v2):
+				   	return 100 - sum([(i-j)**2 for i,j in zip(v1, v2)])**.5
+
+			neighbors[player.name] = sorted([(
+					gaussian(hotkey_info, node.hotkey_info), node.player_name
+					) for node in candidates
+				], reverse = True)
+
+		return neighbors
+			
 	def add_tournament_replay(self, replay_file_path):
-		'''
-		check if we've already added this replay
-		can assert not ladder type
-		'''
+		# Ignore duplicate replays
 		replay_id = hashlib.sha1(
 			open(replay_file_path, mode = 'rb').read()
 			).hexdigest()
 
 		if replay_id in self.replay_ids:
 			self.logger.warning('Replay already exists in database - {}'.format(replay_file_path))
-			self.tree.visualize()
 			return
 
 		replay = self.parser.load_replay(replay_file_path)
+		if not replay:
+			return
+
 		self.replay_ids.add(replay_id)
 
+		# Add new information to the tree
 		for player in replay.players:
 			node_kwargs = {
 			'player_name' : player.name, 
@@ -63,18 +93,16 @@ class SC2BarcodeScannerAPI(object):
 			self.tree_nodes.append(node)
 			self.tree.add(node)
 
+		# Serialize
 		with open(constants.PATH_REPLAY_IDS, mode = 'wb') as f:
 			pickle.dump(self.replay_ids, f)
 
 		with open(constants.PATH_TREE_NODES, mode = 'wb') as f:
 			pickle.dump(self.tree_nodes, f)
 
-
-
-
-
-
-
+	def add_tournament_replay_directory(self, replay_directory):
+		pass
 
 if __name__ == '__main__':
-	SC2BarcodeScannerAPI().add_tournament_replay('test.SC2Replay')
+	# SC2BarcodeScannerAPI().add_tournament_replay('test.SC2Replay')
+	# print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
