@@ -1,3 +1,4 @@
+dill==0.2.4
 Django==1.9
 mpyq==0.2.5
 wheel==0.24.0

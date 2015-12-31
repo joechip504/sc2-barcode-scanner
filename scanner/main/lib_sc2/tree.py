@@ -1,3 +1,6 @@
+import kdtree
+import dill as pickle
+
 class Node(object):
 	'''
 	{
@@ -14,4 +17,8 @@ class Node(object):
 class ReplayKDTree(object):
 	
 	def __init__(self):
-		pass
+		self.tree = None
+		self.replay_ids = set()
+
+if __name__ == '__main__':
+	pass
