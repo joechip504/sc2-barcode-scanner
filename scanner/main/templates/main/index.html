@@ -6,21 +6,22 @@
         <title>Upload a file in Django 1.5 using Dropzone.js</title>
         {% load staticfiles %}
         <link href="{% static 'main/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
+        <link href="{% static 'main/css/animate.css' %}" type="text/css" rel="stylesheet"/>
     </head>
     <body>
- 
+
         <!-- IMPORTANT enctype attribute! -->
         <form class="dropzone" action="{% url "main:home" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
         </form>
- 
+
         <script src="{% static 'main/js/dropzone.js' %}"></script>
         <script type="text/javascript">
             Dropzone.options.myDropzone = {
- 
+
                 // Prevents Dropzone from uploading dropped files immediately
                 autoProcessQueue : true,
- 
+
                 init : function() {
                     myDropzone = this;
 
@@ -29,7 +30,7 @@
                     this.on("addedfile", function() {
                         // Show submit button here and/or inform user to click it.
                     });
- 
+
                 }
             };
         </script>

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block results %}
-<!-- BEGIN FOR LOOP HERE -->
+{% for i in "abc" %}
 <br>
 <!-- Wide card with share menu button -->
 <style>
@@ -30,7 +30,7 @@
 }
 </style>
 <!-- Results Card -->
-<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+<div class="animated fadeInDown demo-card-wide mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text"><strong>lllllllll vs. sPringle</strong></h2>
   </div>
@@ -74,5 +74,6 @@
     </a>
   </div>
 </div>
-<!-- END FOR LOOP HERE -->
+<br>
+{% endfor %}
 {% endblock %}
