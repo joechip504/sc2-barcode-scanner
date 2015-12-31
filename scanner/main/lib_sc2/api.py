@@ -1,12 +1,12 @@
-import constants
+from . import constants
 import dill as pickle
 import hashlib
 import logging
 import os
 import os.path
 import sc2reader
-from replayparser import ReplayParser
-from tree import Node, ReplayKDTree
+from .replayparser import ReplayParser
+from .tree import Node, ReplayKDTree
 
 class SC2BarcodeScannerAPI(object):
 
@@ -110,6 +110,8 @@ class SC2BarcodeScannerAPI(object):
 	                self.add_tournament_replay(replay_file_path)
 
 if __name__ == '__main__':
+	## will need to run from django shell to update from now on
+	pass
 	# SC2BarcodeScannerAPI().add_tournament_replay('test.SC2Replay')
-	print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
+	# print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
 	# SC2BarcodeScannerAPI().add_tournament_replay_directory('../static/main/tournament_replays/')

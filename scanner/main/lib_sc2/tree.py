@@ -1,5 +1,5 @@
-import constants
-import kdtree
+from . import constants
+from . import kdtree
 import dill as pickle
 
 class Node(object):
