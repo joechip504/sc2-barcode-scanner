@@ -2,6 +2,7 @@ import constants
 import dill as pickle
 import hashlib
 import logging
+import os
 import os.path
 import sc2reader
 from replayparser import ReplayParser
@@ -80,6 +81,7 @@ class SC2BarcodeScannerAPI(object):
 		if not replay:
 			return
 
+		self.logger.warning('Adding - {}'.format(replay_file_path))
 		self.replay_ids.add(replay_id)
 
 		# Add new information to the tree
@@ -101,8 +103,13 @@ class SC2BarcodeScannerAPI(object):
 			pickle.dump(self.tree_nodes, f)
 
 	def add_tournament_replay_directory(self, replay_directory):
-		pass
+	    for (dirpath, dirnames, filenames) in os.walk(replay_directory):
+	        for replay in filenames:
+	            if replay.endswith('.SC2Replay'):
+	                replay_file_path = '/'.join([dirpath, replay])
+	                self.add_tournament_replay(replay_file_path)
 
 if __name__ == '__main__':
 	# SC2BarcodeScannerAPI().add_tournament_replay('test.SC2Replay')
-	# print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
+	print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
+	# SC2BarcodeScannerAPI().add_tournament_replay_directory('../static/main/tournament_replays/')
