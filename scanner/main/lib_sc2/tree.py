@@ -1,17 +1,38 @@
+import constants
+import kdtree
+import dill as pickle
+
 class Node(object):
-	'''
-	{
-	'player_name' : 'HuK', 
-	'player_race' : '', 
-	'player_url'  : '', 
-	'hotkey_data' : [1, 12, 14, 2, ... 6], 
-	'winner'  : 'HuK', 
-	'time_elapsed' : 123, 
-	}
-	'''
-	pass
+
+	def __init__(self, **kwargs):
+		self.player_name  = kwargs.get('player_name')
+		self.player_race  = kwargs.get('player_race')
+		self.hotkey_info  = kwargs.get('hotkey_info')
+
+	def __repr__(self):
+		return '{} - {} - {}'.format(self.player_name, self.player_race, self.hotkey_info)
+
+	def __getitem__(self, item):
+		return self.hotkey_info[item]
+
+	def __len__(self):
+		return len(self.hotkey_info)
 
 class ReplayKDTree(object):
-	
-	def __init__(self):
-		pass
+
+	def __init__(self, nodes):
+		self.tree = kdtree.create(nodes, dimensions = 10)
+
+	def add(self, node):
+		self.tree.add(node)
+
+	def search_knn(self, node, k):
+		return self.tree.search_knn(node, k = k)
+
+	def visualize(self):
+		kdtree.visualize(self.tree)
+
+
+
+if __name__ == '__main__':
+	pass

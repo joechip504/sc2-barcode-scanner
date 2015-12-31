@@ -44,7 +44,8 @@ class ReplayParser(object):
 			hotkey_data[event.control_group] += 1
 
 		for i in range(len(hotkey_data)):
-			hotkey_data[i] /= replay.length.mins
+			mins = 1 if replay.length.mins == 0 else replay.length.mins
+			hotkey_data[i] /= mins
 			hotkey_data[i] = int(hotkey_data[i])
 
 		return hotkey_data
