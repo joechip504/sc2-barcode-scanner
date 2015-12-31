@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block results %}
-{% for i in "abc" %}
+{% for i in "a" %}
 <br>
 <!-- Wide card with share menu button -->
 <style>
@@ -36,17 +36,19 @@
   </div>
   <div class="mdl-card__supporting-text">
     <div class="mdl-grid">
-      <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
+      <div class="mdl-cell mdl-cell--6-col mdl-cell--middle">
         <p><strong>Winner:</strong> sPringle</p>
         <p><strong>Map:</strong> Lost Temple</p>
         <p><strong>Time Elapsed:</strong> 20 minutes</p>
       </div>
-      <div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
-        <!-- Player Results Table -->
+    </div>
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--6-col mdl-cell--middle">
+        <!-- Player1 Results Table -->
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <thead>
             <tr>
-              <th class="mdl-data-table__cell--non-numeric">Player</th>
+              <th class="mdl-data-table__cell--non-numeric">lllllllll</th>
               <th>%</th>
             </tr>
           </thead>
@@ -65,6 +67,31 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="mdl-cell mdl-cell--6-col mdl-cell--middle">
+        <!-- Player2 Results Table -->
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <thead>
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">sPringle</th>
+            <th>%</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric" id="guess">Boxer</td>
+            <td id="guess">92</td>
+          </tr>
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric">Jobama</td>
+            <td>14</td>
+          </tr>
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric">Huk</td>
+            <td>10</td>
+          </tr>
+        </tbody>
+      </table>
       </div>
     </div>
   </div>
