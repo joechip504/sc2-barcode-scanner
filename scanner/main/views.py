@@ -21,16 +21,24 @@ def test(request):
 	return HttpResponse('Hello, world')
 	# return render(request, 'main/results.html', {})
 
-def results(request, year, month, day, replay_name):
-	print(year, month, day, replay_name)
-	return HttpResponse('Hello, world')
+def results(request, replay_id):
+	try:
+		replay = UploadFile.objects.get(pk = replay_id)
+	except UploadFile.DoesNotExist:
+		return HttpResponse('Not found')
 
-	# replay_file_path = 'files' + '/'.join([year, month, day, replay_name])
-	# print(replay_file_path)
-	# return HttpResponseRedirect(reverse('main:test'))
-	# response = API.guess_from_ladder_replay(uploaded_file_name)
-	# from pprint import pformat
-	# return HttpResponse(pformat(response))
+	response = API.guess_from_ladder_replay(replay.file.name)
+
+	if not response:
+		return HttpResponse('Problem processing file')
+
+	context = {
+		'response' 		: response,
+		'match_title' 	: ' vs. '.join(response.keys())
+	}
+	from pprint import pprint
+	pprint(response)
+	return render(request, 'main/results.djhtml', context)
 
 def home(request):
 	"""
@@ -43,8 +51,8 @@ def home(request):
 		if form.is_valid():
 			new_file = UploadFile(file = request.FILES['file'])
 			new_file.save()
-			print(new_file.file.name)
-			return HttpResponseRedirect('/results/{}'.format(new_file.file.name))
+			print(new_file.pk)
+			return HttpResponseRedirect('/results/{}'.format(new_file.pk))
 
 	else:
 		form = UploadFileForm()
