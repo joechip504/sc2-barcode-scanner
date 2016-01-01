@@ -19,5 +19,9 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^', views.home, name = 'home'),
+    url(r'^$', views.home, name = 'home'),
+    url(r'^results/files/([0-9]{4})/([0-9]{2})/([0-9]){2}/(.*SC2Replay){1}$', views.results, name = 'results'),
+    url(r'^test/$', views.test, name = 'test'),
+
+    # url(r'^results/.*SC2Replay', views.results, name = 'results'),
 ]
