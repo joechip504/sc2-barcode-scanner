@@ -42,8 +42,9 @@
         <p><strong>Time Elapsed:</strong> 20 minutes</p>
       </div>
       -->
-      <div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
+      
       	{% for player, candidates in response.items %}
+      <div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
         <!-- Player Results Table -->
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <thead>
@@ -61,8 +62,9 @@
             {% endfor %}
           </tbody>
         </table>
+       </div>
         {% endfor %}
-      </div>
+      
     </div>
   </div>
   <div class="mdl-card__actions mdl-card--border">

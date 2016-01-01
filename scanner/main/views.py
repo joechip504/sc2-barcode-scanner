@@ -27,7 +27,11 @@ def results(request, replay_id):
 	except UploadFile.DoesNotExist:
 		return HttpResponse('Not found')
 
-	response = API.guess_from_ladder_replay(replay.file.name)
+	response 		= API.guess_from_ladder_replay(replay.file.name)
+	summary_info 	= API.get_summary_info(replay.file.name)
+
+	from pprint import pprint
+	pprint(summary_info)
 
 	if not response:
 		return HttpResponse('Problem processing file')
@@ -36,8 +40,7 @@ def results(request, replay_id):
 		'response' 		: response,
 		'match_title' 	: ' vs. '.join(response.keys())
 	}
-	from pprint import pprint
-	pprint(response)
+
 	return render(request, 'main/results.djhtml', context)
 
 def home(request):
