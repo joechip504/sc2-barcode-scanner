@@ -35,16 +35,16 @@
   </div>
   <div class="mdl-card__supporting-text">
     <div class="mdl-grid">
-    	<!-- 
+    	<!--
       <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
         <p><strong>Winner:</strong> sPringle</p>
         <p><strong>Map:</strong> Lost Temple</p>
         <p><strong>Time Elapsed:</strong> 20 minutes</p>
       </div>
       -->
-      
+
       	{% for player, candidates in response.items %}
-      <div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
+      <div class="mdl-cell mdl-cell--5-col mdl-cell--middle">
         <!-- Player Results Table -->
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <thead>
@@ -56,15 +56,20 @@
           <tbody>
           	{% for confidence, player_guess in candidates %}
             <tr>
+              {% if confidence > 90 %}
               <td class="mdl-data-table__cell--non-numeric" id="guess">{{player_guess}}</td>
+              <td id="guess">{{confidence}}</td>
+              {% else %}
+              <td class="mdl-data-table__cell--non-numeric">{{player_guess}}</td>
               <td>{{confidence}}</td>
+              {% endif %}
             </tr>
             {% endfor %}
           </tbody>
         </table>
        </div>
         {% endfor %}
-      
+        <br>
     </div>
   </div>
   <div class="mdl-card__actions mdl-card--border">
