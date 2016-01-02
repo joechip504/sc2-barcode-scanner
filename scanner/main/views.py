@@ -1,8 +1,10 @@
 from django.shortcuts 				import render
+from django.shortcuts 				import render_to_response
 from django.http 					import HttpResponseRedirect
 from django.template 				import RequestContext
 from django.core.urlresolvers 		import reverse
 from django.shortcuts 				import render
+from django.contrib                 import messages
 
 from .forms  import UploadFileForm
 from .models import UploadFile
@@ -26,17 +28,17 @@ def home(request):
 			new_file.save()
 			import os
 			print(os.getcwd())
-			candidates = API.guess_from_ladder_replay(new_file.file.name)
+			candidate_dict = API.guess_from_ladder_replay(new_file.file.name)
 			from pprint import pprint
-			pprint(candidates)
-
-			return HttpResponseRedirect(reverse('main:home'))
+			pprint(candidate_dict)
+			return render_to_response('main/index_results.html',
+           		{'form': form, 'candidate_dict': candidate_dict})
 
 	else:
 		form = UploadFileForm()
 
 	return render(
 		request,
-		'main/index_results.html', 
-		{'form' : form}, 
+		'main/index_results.html',
+		{'form' : form},
 		)

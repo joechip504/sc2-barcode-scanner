@@ -30,6 +30,9 @@
 }
 </style>
 <!-- Results Card -->
+{% for player, candidates in candidate_dict.items %}
+<h1>TESTING</h1>
+{% endfor %}
 <div class="animated fadeInDown demo-card-wide mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text"><strong>lllllllll vs. sPringle</strong></h2>
@@ -43,6 +46,7 @@
       </div>
     </div>
     <div class="mdl-grid">
+
       <div class="mdl-cell mdl-cell--6-col mdl-cell--middle">
         <!-- Player1 Results Table -->
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
@@ -79,16 +83,16 @@
         </thead>
         <tbody>
           <tr>
-            <td class="mdl-data-table__cell--non-numeric" id="guess">Boxer</td>
-            <td id="guess">92</td>
+            <td class="mdl-data-table__cell--non-numeric">Flash</td>
+            <td>6</td>
           </tr>
           <tr>
-            <td class="mdl-data-table__cell--non-numeric">Jobama</td>
-            <td>14</td>
+            <td class="mdl-data-table__cell--non-numeric">Day9</td>
+            <td>4</td>
           </tr>
           <tr>
-            <td class="mdl-data-table__cell--non-numeric">Huk</td>
-            <td>10</td>
+            <td class="mdl-data-table__cell--non-numeric">Boxer</td>
+            <td>2</td>
           </tr>
         </tbody>
       </table>
