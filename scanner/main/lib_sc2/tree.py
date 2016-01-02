@@ -1,5 +1,5 @@
-import constants
-import kdtree
+from . import constants
+from . import kdtree
 import dill as pickle
 
 class Node(object):
@@ -34,5 +34,5 @@ class ReplayKDTree(object):
 
 
 
-if __name__ == '__main__':
-	pass
+# if __name__ == '__main__':
+# 	pass

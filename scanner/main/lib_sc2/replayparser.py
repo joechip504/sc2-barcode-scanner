@@ -65,6 +65,6 @@ class ReplayParser(object):
 		return replay
 		
 
-if __name__ == '__main__':
-	parser = ReplayParser()
-	parser.parse_replay('test.SC2Replay')
+# if __name__ == '__main__':
+# 	parser = ReplayParser()
+# 	parser.load_replay('test.SC2Replay')

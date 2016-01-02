@@ -1,12 +1,12 @@
-import constants
+from . import constants
 import dill as pickle
 import hashlib
 import logging
 import os
 import os.path
 import sc2reader
-from replayparser import ReplayParser
-from tree import Node, ReplayKDTree
+from .replayparser import ReplayParser
+from .tree import Node, ReplayKDTree
 
 class SC2BarcodeScannerAPI(object):
 
@@ -58,14 +58,29 @@ class SC2BarcodeScannerAPI(object):
 			candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5)]
 
 			def gaussian(v1, v2):
-				   	return 100 - sum([(i-j)**2 for i,j in zip(v1, v2)])**.5
+				   	return float('{0:.2f}'.format(100 - sum([(i-j)**2 for i,j in zip(v1, v2)])**.5))
 
 			neighbors[player.name] = sorted([(
 					gaussian(hotkey_info, node.hotkey_info), node.player_name
 					) for node in candidates
-				], reverse = True)
+				], reverse = True)[:5]
 
 		return neighbors
+
+	def get_players(self, replay_file_path):
+		replay = self.parser.load_replay(replay_file_path)
+		return replay.players if replay else []
+
+
+	def get_summary_info(self, replay_file_path):
+		replay = self.parser.load_replay(replay_file_path)
+		return {
+			'match_title' : ' vs. '.join([p.name for p in replay.players]),
+			'map_name'		: replay.map_name,
+			'length'		: replay.game_length, # object
+			'category'		: replay.category, # ladder, custom
+			'winner'		: replay.winner, # object
+		} if replay else {}
 			
 	def add_tournament_replay(self, replay_file_path):
 		# Ignore duplicate replays
@@ -109,7 +124,10 @@ class SC2BarcodeScannerAPI(object):
 	                replay_file_path = '/'.join([dirpath, replay])
 	                self.add_tournament_replay(replay_file_path)
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+	## will need to run from django shell to update from now on
+	# constants.PATH_TREE_NODES = constants.PATH_TREE_NODES_LOCAL
+	# constants.PATH_REPLAY_IDS = constants.PATH_REPLAY_IDS_LOCAL
 	# SC2BarcodeScannerAPI().add_tournament_replay('test.SC2Replay')
-	print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
+	# print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
 	# SC2BarcodeScannerAPI().add_tournament_replay_directory('../static/main/tournament_replays/')
