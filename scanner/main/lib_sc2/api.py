@@ -63,7 +63,7 @@ class SC2BarcodeScannerAPI(object):
 			neighbors[player.name] = sorted([(
 					gaussian(hotkey_info, node.hotkey_info), node.player_name
 					) for node in candidates
-				], reverse = True)
+				], reverse = True)[:5]
 
 		return neighbors
 
