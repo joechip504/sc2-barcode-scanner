@@ -124,9 +124,10 @@ class SC2BarcodeScannerAPI(object):
 	                replay_file_path = '/'.join([dirpath, replay])
 	                self.add_tournament_replay(replay_file_path)
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 	## will need to run from django shell to update from now on
-	pass
+	# constants.PATH_TREE_NODES = constants.PATH_TREE_NODES_LOCAL
+	# constants.PATH_REPLAY_IDS = constants.PATH_REPLAY_IDS_LOCAL
 	# SC2BarcodeScannerAPI().add_tournament_replay('test.SC2Replay')
 	# print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
 	# SC2BarcodeScannerAPI().add_tournament_replay_directory('../static/main/tournament_replays/')
