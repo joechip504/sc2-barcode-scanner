@@ -1,12 +1,3 @@
-{% extends "index.html" %}
-
-{% block dependencies %}
-<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
-<script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-{% endblock %}
-{% block results %}
-
 <br>
 <!-- Wide card with share menu button -->
 <style>
@@ -27,6 +18,11 @@
   color: green;
   font-weight: bold;
 }
+.mdl-card__supporting-text {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 </style>
 <!-- Results Card -->
 <div class="animated fadeInDown demo-card-wide mdl-card mdl-shadow--2dp">
@@ -35,16 +31,8 @@
   </div>
   <div class="mdl-card__supporting-text">
     <div class="mdl-grid">
-    	<!--
-      <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
-        <p><strong>Winner:</strong> sPringle</p>
-        <p><strong>Map:</strong> Lost Temple</p>
-        <p><strong>Time Elapsed:</strong> 20 minutes</p>
-      </div>
-      -->
-
-      	{% for player, candidates in response.items %}
-      <div class="mdl-cell mdl-cell--5-col mdl-cell--middle">
+      {% for player, candidates in response.items %}
+      <div class="mdl-cell mdl-cell--6-col mdl-cell--middle">
         <!-- Player Results Table -->
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <thead>
@@ -67,9 +55,16 @@
             {% endfor %}
           </tbody>
         </table>
-       </div>
-        {% endfor %}
-        <br>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--12-col mdl-cell--middle">
+        <p><strong>Winner:</strong> {{summary_info.winner}}</p>
+        <p><strong>Map:</strong> {{summary_info.map_name}}</p>
+        <p><strong>Time Elapsed:</strong> {{summary_info.length}}</p>
+        <p><strong>Category:</strong> {{summary_info.category}}</p>
+      </div>
     </div>
   </div>
   <div class="mdl-card__actions mdl-card--border">
@@ -79,4 +74,3 @@
   </div>
 </div>
 <br>
-{% endblock %}

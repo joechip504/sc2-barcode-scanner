@@ -41,6 +41,7 @@ def results(request, replay_id):
 
 	context = {
 		'response' 		: response,
+		'summary_info'  : summary_info,
 		'match_title' 	: ' vs. '.join(response.keys())
 	}
 

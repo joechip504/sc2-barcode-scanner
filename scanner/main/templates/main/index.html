@@ -8,6 +8,9 @@
         <link href="{% static 'main/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
         <link href="{% static 'main/css/animate.css' %}" type="text/css" rel="stylesheet"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+        <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     </head>
     <body>
 
@@ -31,9 +34,8 @@
                   this.on("success", function(file, response) {
                     console.log(file);
                     console.log(response);
-                    document.open();
-                    document.write(response);
-                    document.close();
+                    var results_block = document.getElementById("results");
+                    results_block.innerHTML = response;
                   });
                 }
             };
