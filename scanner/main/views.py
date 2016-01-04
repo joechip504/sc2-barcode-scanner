@@ -40,7 +40,7 @@ def results(request, replay_id):
 		return HttpResponse('Problem processing file')
 
 	context = {
-		'response' 		: response,
+			'response' 		: response,
 		'summary_info'  : summary_info,
 		'match_title' 	: ' vs. '.join(response.keys())
 	}
