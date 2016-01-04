@@ -10,6 +10,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
         <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="{% static 'main/js/smoothscroll.js' %}"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     </head>
     <body>
@@ -21,6 +23,7 @@
 
         <script src="{% static 'main/js/dropzone.js' %}"></script>
         <script type="text/javascript">
+
             Dropzone.options.myDropzone = {
 
                 // Prevents/enables Dropzone from uploading dropped files immediately
@@ -35,11 +38,41 @@
                     console.log(file);
                     console.log(response);
                     var results_block = document.getElementById("results");
-                    results_block.innerHTML = response;
+                    var div = document.createElement("div");
+                    div.innerHTML = response;
+                    // results_block.appendChild(div);
+                    $(response).hide().prependTo("#results").slideDown(1000);
                   });
                 }
             };
         </script>
+
+        <style>
+        .demo-card-wide.mdl-card {
+          width: 512px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .demo-card-wide > .mdl-card__title {
+          color: #fff;
+          height: 176px;
+          background: url('http://www.hdwallpapers.in/walls/starcraft_2_heart_of_the_swarm-HD.jpg') center / cover;
+        }
+        .demo-card-wide > .mdl-card__menu {
+          color: #fff;
+        }
+        #guess {
+          color: green;
+          font-weight: bold;
+        }
+        .mdl-card__supporting-text {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .guess_row {
+          cursor: pointer;
+        }
+        </style>
 
         <div id="results">
             {% block results %} {% endblock %}

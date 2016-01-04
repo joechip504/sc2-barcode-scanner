@@ -16,7 +16,7 @@ class SC2BarcodeScannerAPI(object):
 		self.logger.setLevel(logging.DEBUG)
 
 		# Initialize empty structures if necessary
-		if not (os.path.isfile(constants.PATH_REPLAY_IDS) and 
+		if not (os.path.isfile(constants.PATH_REPLAY_IDS) and
 			os.path.isfile(constants.PATH_TREE_NODES)):
 			with open(constants.PATH_REPLAY_IDS, mode = 'wb') as f:
 				pickle.dump(set(), f)
@@ -38,8 +38,8 @@ class SC2BarcodeScannerAPI(object):
 		'''
 		Open the replay and guess the identity of both players.
 		{
-			'player1_name' : [(.918, 'Huk'), (.771, 'CranK'), ...], 
-			'player2_name' : [(.555, 'Jobama'), (.412, 'sPringle'), ...], 
+			'player1_name' : [(.918, 'Huk'), (.771, 'CranK'), ...],
+			'player2_name' : [(.555, 'Jobama'), (.412, 'sPringle'), ...],
 		}
 		'''
 		replay = self.parser.load_replay(replay_file_path)
@@ -50,7 +50,7 @@ class SC2BarcodeScannerAPI(object):
 		for player in replay.players:
 			hotkey_info = self.parser.extract_hotkey_info(replay, player)
 			node_kwargs = {
-			'player_name' : player.name, 
+			'player_name' : player.name,
 			'player_race' : player.play_race,
 			'hotkey_info' : hotkey_info,
 			}
@@ -79,9 +79,9 @@ class SC2BarcodeScannerAPI(object):
 			'map_name'		: replay.map_name,
 			'length'		: replay.game_length, # object
 			'category'		: replay.category, # ladder, custom
-			'winner'		: replay.winner, # object
+			'winner'		: replay.winner.players[0].name,
 		} if replay else {}
-			
+
 	def add_tournament_replay(self, replay_file_path):
 		# Ignore duplicate replays
 		replay_id = hashlib.sha1(
@@ -102,7 +102,7 @@ class SC2BarcodeScannerAPI(object):
 		# Add new information to the tree
 		for player in replay.players:
 			node_kwargs = {
-			'player_name' : player.name, 
+			'player_name' : player.name,
 			'player_race' : player.play_race,
 			'hotkey_info' : self.parser.extract_hotkey_info(replay, player),
 			}

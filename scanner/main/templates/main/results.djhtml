@@ -1,31 +1,5 @@
 <br>
-<!-- Wide card with share menu button -->
-<style>
-.demo-card-wide.mdl-card {
-  width: 512px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.demo-card-wide > .mdl-card__title {
-  color: #fff;
-  height: 176px;
-  background: url('http://www.hdwallpapers.in/walls/starcraft_2_heart_of_the_swarm-HD.jpg') center / cover;
-}
-.demo-card-wide > .mdl-card__menu {
-  color: #fff;
-}
-#guess {
-  color: green;
-  font-weight: bold;
-}
-.mdl-card__supporting-text {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-</style>
-<!-- Results Card -->
-<div class="animated fadeInDown demo-card-wide mdl-card mdl-shadow--2dp">
+<div class="animated zoomIn demo-card-wide mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text"><strong>{{match_title}}</strong></h2>
   </div>
@@ -45,10 +19,10 @@
           	{% for confidence, player_guess in candidates %}
             <tr>
               {% if confidence > 90 %}
-              <td class="mdl-data-table__cell--non-numeric" id="guess">{{player_guess}}</td>
+              <td class="mdl-data-table__cell--non-numeric guess_row" id="guess">{{player_guess}}</td>
               <td id="guess">{{confidence}}</td>
               {% else %}
-              <td class="mdl-data-table__cell--non-numeric">{{player_guess}}</td>
+              <td class="mdl-data-table__cell--non-numeric guess_row">{{player_guess}}</td>
               <td>{{confidence}}</td>
               {% endif %}
             </tr>
@@ -63,13 +37,12 @@
         <p><strong>Winner:</strong> {{summary_info.winner}}</p>
         <p><strong>Map:</strong> {{summary_info.map_name}}</p>
         <p><strong>Time Elapsed:</strong> {{summary_info.length}}</p>
-        <p><strong>Category:</strong> {{summary_info.category}}</p>
       </div>
     </div>
   </div>
   <div class="mdl-card__actions mdl-card--border">
     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-      Share Results
+      FEEDBACK
     </a>
   </div>
 </div>
