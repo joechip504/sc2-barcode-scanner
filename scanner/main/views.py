@@ -1,8 +1,11 @@
 from django.shortcuts 				import render
+from django.shortcuts 				import render_to_response
+from django.http 					import HttpResponseRedirect
 from django.http 					import HttpResponseRedirect, HttpResponse
 from django.template 				import RequestContext
 from django.core.urlresolvers 		import reverse
 from django.shortcuts 				import render
+from django.contrib                 import messages
 
 from .forms  import UploadFileForm
 from .models import UploadFile
@@ -38,6 +41,7 @@ def results(request, replay_id):
 
 	context = {
 		'response' 		: response,
+		'summary_info'  : summary_info,
 		'match_title' 	: ' vs. '.join(response.keys())
 	}
 
@@ -65,6 +69,6 @@ def home(request):
 
 	return render(
 		request,
-		'main/index.html', 
-		context, 
+		'main/index.html',
+		context,
 		)
