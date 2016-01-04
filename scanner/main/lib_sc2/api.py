@@ -85,12 +85,13 @@ class SC2BarcodeScannerAPI(object):
 			def cosine_similarity(x,y):
 				numerator = sum(a*b for a,b in zip(x,y))
 				denominator = square_rooted(x)*square_rooted(y)
+				denominator = 1 if denominator == 0 else denominator
 				return round(numerator/float(denominator),3)
  
 			node 	   = Node(**node_kwargs)
 			# candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance)]
 
-			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance) if dist < 1000]
+			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance) if float(dist) < 1000.0]
 			# candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = euclid_distance) if dist < 10000]
 
 			candidate_dict 		= defaultdict(list)
