@@ -25,9 +25,10 @@ class ReplayKDTree(object):
 
 	def add(self, node):
 		self.tree.add(node)
+		self.tree = self.tree.rebalance()
 
-	def search_knn(self, node, k):
-		return self.tree.search_knn(node, k = k)
+	def search_knn(self, node, k, dist = None):
+		return self.tree.search_knn(node, k = k, dist = dist)
 
 	def visualize(self):
 		kdtree.visualize(self.tree)

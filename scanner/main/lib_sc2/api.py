@@ -2,11 +2,14 @@ from . import constants
 import dill as pickle
 import hashlib
 import logging
+import math
 import os
 import os.path
 import sc2reader
 from .replayparser import ReplayParser
 from .tree import Node, ReplayKDTree
+import statistics
+from collections import defaultdict
 
 class SC2BarcodeScannerAPI(object):
 
@@ -54,17 +57,48 @@ class SC2BarcodeScannerAPI(object):
 			'player_race' : player.play_race,
 			'hotkey_info' : hotkey_info,
 			}
-			node 	   = Node(**node_kwargs)
-			candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5)]
 
 			def gaussian(v1, v2):
 				   	return float('{0:.2f}'.format(100 - sum([(i-j)**2 for i,j in zip(v1, v2)])**.5))
 
+			def mean(v):
+				return float('{0:.2f}'.format(statistics.mean(v)))
+
+
+			def manhattan_distance(v1, v2):
+				dist = sum(abs(a-b) for a,b in zip(v1,v2))
+				if v1.player_race != v2.player_race:
+					dist += 1000
+				return dist
+
+			node 	   = Node(**node_kwargs)
+			candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance)]
+
+			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance) if dist < 1000]
+			candidate_dict 		= defaultdict(list)
+
+			for node in candidates_by_race:
+				candidate_dict[node.player_name].append(node)
+
+			# Make sure at least 3 replays in this cluster match a player
+			candidate_dict = {k : v for k,v in candidate_dict.items() if len(v) > 2}
+
+			for p, nodes in candidate_dict.items():
+				percentages = [gaussian(hotkey_info, n.hotkey_info) for n in nodes]
+				candidate_dict[p] = percentages
+
 			neighbors[player.name] = sorted([(
-					gaussian(hotkey_info, node.hotkey_info), node.player_name
-					) for node in candidates
+				mean(percentages), p, len(percentages)
+				) for p, percentages in candidate_dict.items()
 				], reverse = True)[:5]
 
+			# neighbors[player.name] = sorted([(
+			# 		gaussian(hotkey_info, node.hotkey_info), node.player_name
+			# 		) for node in candidates
+			# 	], reverse = True)[:5]
+
+		from pprint import pprint
+		pprint(neighbors)
 		return neighbors
 
 	def get_players(self, replay_file_path):
