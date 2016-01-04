@@ -10,6 +10,7 @@ from .replayparser import ReplayParser
 from .tree import Node, ReplayKDTree
 import statistics
 from collections import defaultdict
+import math
 
 class SC2BarcodeScannerAPI(object):
 
@@ -71,10 +72,27 @@ class SC2BarcodeScannerAPI(object):
 					dist += 1000
 				return dist
 
+			def euclid_distance(v1 ,v2):
+				dist = math.sqrt(sum([(i-j)**2 for i, j in zip(v1, v2)]))
+				print(dist)
+				if v1.player_race != v2.player_race:
+					dist += 10000
+				return dist
+
+			def square_rooted(x):
+				return round(math.sqrt(sum([a*a for a in x])),3)
+
+			def cosine_similarity(x,y):
+				numerator = sum(a*b for a,b in zip(x,y))
+				denominator = square_rooted(x)*square_rooted(y)
+				return round(numerator/float(denominator),3)
+ 
 			node 	   = Node(**node_kwargs)
-			candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance)]
+			# candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance)]
 
 			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance) if dist < 1000]
+			# candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = euclid_distance) if dist < 10000]
+
 			candidate_dict 		= defaultdict(list)
 
 			for node in candidates_by_race:
@@ -83,14 +101,38 @@ class SC2BarcodeScannerAPI(object):
 			# Make sure at least 3 replays in this cluster match a player
 			candidate_dict = {k : v for k,v in candidate_dict.items() if len(v) > 2}
 
-			for p, nodes in candidate_dict.items():
-				percentages = [gaussian(hotkey_info, n.hotkey_info) for n in nodes]
-				candidate_dict[p] = percentages
+			class Player(object):
+				def __init__(self, percent_match, sample_size, url, name):
+					self.name = name
+					self.confidence = percent_match
+					self.url = url
+					self.sample_size = sample_size
 
-			neighbors[player.name] = sorted([(
-				mean(percentages), p, len(percentages)
-				) for p, percentages in candidate_dict.items()
-				], reverse = True)[:5]
+				def __lt__(self, other):
+					# return self.confidence < other.confidence
+					return self.sample_size < other.sample_size
+
+				def __repr__(self):
+					return self.url
+
+			player_objs = []
+
+			for p, nodes in candidate_dict.items():
+				# percentages = [gaussian(hotkey_info, n.hotkey_info) for n in nodes]
+				percentages = [100*cosine_similarity(hotkey_info, n.hotkey_info) for n in nodes]
+
+				player_objs.append(Player(
+					mean(percentages),
+					len(percentages),
+					nodes[0].player_url,
+					p))
+
+			neighbors[player.name] = sorted(player_objs, reverse = True)[:8]
+
+			# neighbors[player.name] = sorted([(
+			# 	mean(percentages), p, len(percentages)
+			# 	) for p, percentages in candidate_dict.items()
+			# 	], reverse = True)[:5]
 
 			# neighbors[player.name] = sorted([(
 			# 		gaussian(hotkey_info, node.hotkey_info), node.player_name
@@ -138,6 +180,7 @@ class SC2BarcodeScannerAPI(object):
 			node_kwargs = {
 			'player_name' : player.name,
 			'player_race' : player.play_race,
+			'player_url' : player.url,
 			'hotkey_info' : self.parser.extract_hotkey_info(replay, player),
 			}
 			node = Node(**node_kwargs)

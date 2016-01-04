@@ -8,6 +8,8 @@ class Node(object):
 		self.player_name  = kwargs.get('player_name')
 		self.player_race  = kwargs.get('player_race')
 		self.hotkey_info  = kwargs.get('hotkey_info')
+		self.player_url  = kwargs.get('player_url')
+
 
 	def __repr__(self):
 		return '{} - {} - {}'.format(self.player_name, self.player_race, self.hotkey_info)
