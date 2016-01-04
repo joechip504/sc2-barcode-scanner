@@ -58,5 +58,5 @@ docs/_build/
 target/
 
 # Replays
-.SC2Replay
-.sqlite3
+*.SC2Replay
+*.sqlite3
