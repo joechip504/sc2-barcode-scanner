@@ -1,0 +1,30 @@
+{% load staticfiles %}
+
+<style>
+#sadflash {
+  background: url("{% static 'main/img/sadflash.jpg' %}") center / cover;
+}
+#error_card {
+  width: 350px;
+}
+</style>
+
+<br>
+<div class="animated zoomIn demo-card-wide mdl-card mdl-shadow--2dp" id="error_card">
+  <div class="mdl-card__title" id="sadflash">
+    <h2 class="mdl-card__title-text"><strong>{{error}}</strong></h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--12-col mdl-cell--middle">
+        <p><strong>File Name:</strong> {{file_name}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+      FEEDBACK
+    </a>
+  </div>
+</div>
+<br>

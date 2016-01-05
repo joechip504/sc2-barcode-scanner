@@ -3,7 +3,7 @@
     <head>
         {% block dependencies %} {% endblock %}
         <meta charset="utf-8">
-        <title>Upload a file in Django 1.5 using Dropzone.js</title>
+        <title>SC2 Barcode Scanner</title>
         {% load staticfiles %}
         <link href="{% static 'main/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
         <link href="{% static 'main/css/animate.css' %}" type="text/css" rel="stylesheet"/>
@@ -16,79 +16,126 @@
     </head>
     <body>
 
+      <script src="{% static 'main/js/dropzone.js' %}"></script>
+      <script type="text/javascript">
+          function exampleReplay() {
+            $.ajax({url: "/results/22", success: function(result){
+              $(result).hide().prependTo("#results").slideDown(1000);
+            }});
+          }
+
+          Dropzone.options.myDropzone = {
+
+              // Prevents/enables Dropzone from uploading dropped files immediately
+              autoProcessQueue : true,
+              maxFilesize: 2,
+              dictDefaultMessage: "Drag *.SC2Replay file here",
+              acceptedFiles: ".SC2Replay",
+              maxFiles: 100,
+
+              init: function() {
+                this.on("addedfile", function(file) {
+                  console.log("hello");
+                });
+
+                this.on("success", function(file, response) {
+                  console.log(file);
+                  console.log(response);
+                  // results_block.appendChild(div);
+                  $(response).hide().prependTo("#results").slideDown(1000);
+                });
+              }
+          };
+      </script>
+      <style>
+      a {
+        color: rgba(0,0,0,.54);
+        text-decoration: none; /* no underline */
+      }
+      .demo-card-wide.mdl-card {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 5px;
+      }
+      .demo-card-wide > .mdl-card__title {
+        color: #fff;
+        height: 176px;
+        background: url('http://www.hdwallpapers.in/walls/starcraft_2_heart_of_the_swarm-HD.jpg') center / cover;
+      }
+      .demo-card-wide > .mdl-card__menu {
+        color: #fff;
+      }
+      #guess {
+        color: green;
+        font-weight: bold;
+      }
+      #welcome {
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .player_cell {
+        cursor: pointer;
+      }
+      .mdl-cell {
+        align-self: baseline;
+      }
+      .dropzone {
+        border-radius: 5px;
+        border: 2px rgb(63,81,181) dashed;
+        position: fixed;
+        width: 100%;
+        z-index: 1000000;
+      }
+      .dz-message {
+        font-weight: bold;
+        font-size: 2em;
+      }
+      #results {
+        margin-top: 150px;
+      }
+      body {
+        background: #fafafa;
+      }
+      </style>
+
         <!-- IMPORTANT enctype attribute! -->
+        <div>
         <form class="dropzone" action="{% url "main:home" %}" method="post" enctype="multipart/form-data" id="myDropzone">
             {% csrf_token %}
         </form>
-
-        <script src="{% static 'main/js/dropzone.js' %}"></script>
-        <script type="text/javascript">
-
-            function exampleReplay() {
-              $.ajax({url: "/results/22", success: function(result){
-                $("#welcome").hide();
-                $(result).hide().prependTo("#results").slideDown(1000);
-              }});
-            }
-
-            Dropzone.options.myDropzone = {
-
-                // Prevents/enables Dropzone from uploading dropped files immediately
-                autoProcessQueue : true,
-
-                init: function() {
-                  this.on("addedfile", function(file) {
-                    console.log("hello");
-                  });
-
-                  this.on("success", function(file, response) {
-                    console.log(file);
-                    console.log(response);
-                    // results_block.appendChild(div);
-                    $(response).hide().prependTo("#results").slideDown(1000);
-                  });
-                }
-            };
-        </script>
-
-        <style>
-        .demo-card-wide.mdl-card {
-          width: 512px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .demo-card-wide > .mdl-card__title {
-          color: #fff;
-          height: 176px;
-          background: url('http://www.hdwallpapers.in/walls/starcraft_2_heart_of_the_swarm-HD.jpg') center / cover;
-        }
-        .demo-card-wide > .mdl-card__menu {
-          color: #fff;
-        }
-        #guess {
-          color: green;
-          font-weight: bold;
-        }
-        .mdl-card__supporting-text {
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .guess_row {
-          cursor: pointer;
-        }
-        </style>
+        shhhhh we're bad at html
+        </div>
 
         <div id="results">
           <div id="welcome">
-            <div class="mdl-grid">
-              <div class="mdl-cell mdl-cell--12-col mdl-cell--middle">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="exampleReplay()">
-                  Example Replay
-                </button>
-              </div>
-            </div>
+
+                <!-- WELCOME CARD -->
+                <br>
+                <div class="animated zoomIn demo-card-wide mdl-card mdl-shadow--2dp">
+                  <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text"><strong>Welcome!</strong></h2>
+                  </div>
+                  <div class="mdl-card__supporting-text">
+                    <div class="mdl-grid">
+                      <div class="mdl-cell mdl-cell--12-col mdl-cell--middle">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="exampleReplay()">
+                          Example Replay
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mdl-card__actions mdl-card--border">
+                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                      FEEDBACK
+                    </a>
+                  </div>
+                </div>
+                <br>
+
           </div>
-            {% block results %} {% endblock %}
+          {% block results %} {% endblock %}
         </div>
 
     </body>

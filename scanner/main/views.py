@@ -34,12 +34,21 @@ def results(request, replay_id):
 	summary_info 	= API.get_summary_info(replay.file.name)
 
 	if not response or not summary_info:
-		return HttpResponse('Problem processing file')
+		context = {
+			'error'     : 'unable to process file',
+			'file_name' : replay.file.name
+		}
+		return render(
+			request,
+			'main/upload_error.djhtml',
+			context,
+			)
 
 	context = {
 		'response' 		: response,
 		'summary_info'  : summary_info,
-		'match_title' 	: ' vs. '.join(response.keys())
+		'match_title' 	: ' vs. '.join(response.keys()),
+		'file_name' : replay.file.name
 	}
 
 	return render(request, 'main/results.djhtml', context)
