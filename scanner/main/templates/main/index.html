@@ -24,6 +24,13 @@
         <script src="{% static 'main/js/dropzone.js' %}"></script>
         <script type="text/javascript">
 
+            function exampleReplay() {
+              $.ajax({url: "/results/22", success: function(result){
+                $("#welcome").hide();
+                $(result).hide().prependTo("#results").slideDown(1000);
+              }});
+            }
+
             Dropzone.options.myDropzone = {
 
                 // Prevents/enables Dropzone from uploading dropped files immediately
@@ -37,9 +44,6 @@
                   this.on("success", function(file, response) {
                     console.log(file);
                     console.log(response);
-                    var results_block = document.getElementById("results");
-                    var div = document.createElement("div");
-                    div.innerHTML = response;
                     // results_block.appendChild(div);
                     $(response).hide().prependTo("#results").slideDown(1000);
                   });
@@ -74,7 +78,19 @@
         }
         </style>
 
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="clearResults()">
+          Example Replay
+        </button>
         <div id="results">
+          <div id="welcome">
+            <div class="mdl-grid">
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--middle">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="exampleReplay()">
+                  Example Replay
+                </button>
+              </div>
+            </div>
+          </div>
             {% block results %} {% endblock %}
         </div>
 
