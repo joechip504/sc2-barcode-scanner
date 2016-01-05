@@ -2,11 +2,15 @@ from . import constants
 import dill as pickle
 import hashlib
 import logging
+import math
 import os
 import os.path
 import sc2reader
 from .replayparser import ReplayParser
 from .tree import Node, ReplayKDTree
+import statistics
+from collections import defaultdict
+import math
 
 class SC2BarcodeScannerAPI(object):
 
@@ -54,17 +58,90 @@ class SC2BarcodeScannerAPI(object):
 			'player_race' : player.play_race,
 			'hotkey_info' : hotkey_info,
 			}
-			node 	   = Node(**node_kwargs)
-			candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5)]
 
 			def gaussian(v1, v2):
 				   	return float('{0:.2f}'.format(100 - sum([(i-j)**2 for i,j in zip(v1, v2)])**.5))
 
-			neighbors[player.name] = sorted([(
-					gaussian(hotkey_info, node.hotkey_info), node.player_name
-					) for node in candidates
-				], reverse = True)[:5]
+			def mean(v):
+				return float('{0:.2f}'.format(statistics.mean(v)))
 
+
+			def manhattan_distance(v1, v2):
+				dist = sum(abs(a-b) for a,b in zip(v1,v2))
+				if v1.player_race != v2.player_race:
+					dist += 1000
+				return dist
+
+			def euclid_distance(v1 ,v2):
+				dist = math.sqrt(sum([(i-j)**2 for i, j in zip(v1, v2)]))
+				print(dist)
+				if v1.player_race != v2.player_race:
+					dist += 10000
+				return dist
+
+			def square_rooted(x):
+				return round(math.sqrt(sum([a*a for a in x])),3)
+
+			def cosine_similarity(x,y):
+				numerator = sum(a*b for a,b in zip(x,y))
+				denominator = square_rooted(x)*square_rooted(y)
+				denominator = 1 if denominator == 0 else denominator
+				return round(numerator/float(denominator),3)
+ 
+			node 	   = Node(**node_kwargs)
+			# candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance)]
+
+			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance) if float(dist) < 1000.0]
+			# candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = euclid_distance) if dist < 10000]
+
+			candidate_dict 		= defaultdict(list)
+
+			for node in candidates_by_race:
+				candidate_dict[node.player_name].append(node)
+
+			# Make sure at least 3 replays in this cluster match a player
+			candidate_dict = {k : v for k,v in candidate_dict.items() if len(v) > 2}
+
+			class Player(object):
+				def __init__(self, percent_match, sample_size, url, name):
+					self.name = name
+					self.confidence = percent_match
+					self.url = url
+					self.sample_size = sample_size
+
+				def __lt__(self, other):
+					# return self.confidence < other.confidence
+					return self.sample_size < other.sample_size
+
+				def __repr__(self):
+					return self.url
+
+			player_objs = []
+
+			for p, nodes in candidate_dict.items():
+				# percentages = [gaussian(hotkey_info, n.hotkey_info) for n in nodes]
+				percentages = [100*cosine_similarity(hotkey_info, n.hotkey_info) for n in nodes]
+
+				player_objs.append(Player(
+					mean(percentages),
+					len(percentages),
+					nodes[0].player_url,
+					p))
+
+			neighbors[player.name] = sorted(player_objs, reverse = True)[:8]
+
+			# neighbors[player.name] = sorted([(
+			# 	mean(percentages), p, len(percentages)
+			# 	) for p, percentages in candidate_dict.items()
+			# 	], reverse = True)[:5]
+
+			# neighbors[player.name] = sorted([(
+			# 		gaussian(hotkey_info, node.hotkey_info), node.player_name
+			# 		) for node in candidates
+			# 	], reverse = True)[:5]
+
+		from pprint import pprint
+		pprint(neighbors)
 		return neighbors
 
 	def get_players(self, replay_file_path):
@@ -104,6 +181,7 @@ class SC2BarcodeScannerAPI(object):
 			node_kwargs = {
 			'player_name' : player.name,
 			'player_race' : player.play_race,
+			'player_url' : player.url,
 			'hotkey_info' : self.parser.extract_hotkey_info(replay, player),
 			}
 			node = Node(**node_kwargs)

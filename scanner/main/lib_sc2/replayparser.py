@@ -44,8 +44,8 @@ class ReplayParser(object):
 			hotkey_data[event.control_group] += 1
 
 		for i in range(len(hotkey_data)):
-			mins = 1 if replay.length.mins == 0 else replay.length.mins
-			hotkey_data[i] /= mins
+			seconds = 1 if replay.real_length.total_seconds() == 0 else replay.length.total_seconds()
+			hotkey_data[i] /= (seconds / 60)
 			hotkey_data[i] = int(hotkey_data[i])
 
 		return hotkey_data
@@ -67,4 +67,5 @@ class ReplayParser(object):
 
 # if __name__ == '__main__':
 # 	parser = ReplayParser()
-# 	parser.load_replay('test.SC2Replay')
+# 	replay = parser.load_replay('test.SC2Replay')
+# 	print(replay.winner.players[0].name)

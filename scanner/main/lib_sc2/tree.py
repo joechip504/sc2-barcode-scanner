@@ -8,6 +8,8 @@ class Node(object):
 		self.player_name  = kwargs.get('player_name')
 		self.player_race  = kwargs.get('player_race')
 		self.hotkey_info  = kwargs.get('hotkey_info')
+		self.player_url  = kwargs.get('player_url')
+
 
 	def __repr__(self):
 		return '{} - {} - {}'.format(self.player_name, self.player_race, self.hotkey_info)
@@ -25,9 +27,10 @@ class ReplayKDTree(object):
 
 	def add(self, node):
 		self.tree.add(node)
+		self.tree = self.tree.rebalance()
 
-	def search_knn(self, node, k):
-		return self.tree.search_knn(node, k = k)
+	def search_knn(self, node, k, dist = None):
+		return self.tree.search_knn(node, k = k, dist = dist)
 
 	def visualize(self):
 		kdtree.visualize(self.tree)
