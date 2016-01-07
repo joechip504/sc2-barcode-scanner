@@ -38,6 +38,7 @@
     </div>
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--12-col mdl-cell--middle">
+        <h3>Match Details</h3>
         <p><strong>Winner:</strong> {{summary_info.winner}}</p>
         <p><strong>Map:</strong> {{summary_info.map_name}}</p>
         <p><strong>Time Elapsed:</strong> {{summary_info.length}}</p>

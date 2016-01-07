@@ -17,6 +17,7 @@
   <div class="mdl-card__supporting-text">
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--12-col mdl-cell--middle">
+        <p><strong>Error:</strong> could not parse file</p>
         <p><strong>File Name:</strong> {{file_name}}</p>
       </div>
     </div>

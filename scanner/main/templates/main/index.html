@@ -1,10 +1,9 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
     <head>
-        {% block dependencies %} {% endblock %}
         <meta charset="utf-8">
         <title>SC2 Barcode Scanner</title>
-        {% load staticfiles %}
         <link href="{% static 'main/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
         <link href="{% static 'main/css/animate.css' %}" type="text/css" rel="stylesheet"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -12,105 +11,40 @@
         <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="{% static 'main/js/smoothscroll.js' %}"></script>
+        <script type="text/javascript" src="{% static 'main/js/main.js' %}"></script>
+        <script type="text/javascript" src="{% static 'main/js/dropzone.js' %}"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="{% static 'main/css/main.css' %}" type="text/css" rel="stylesheet"/>
     </head>
     <body>
+      <script>
+        Dropzone.options.myDropzone = {
+            // Prevents/enables Dropzone from uploading dropped files immediately
+            autoProcessQueue : true,
+            maxFilesize: 2,
+            dictDefaultMessage: "Drag *.SC2Replay file here",
+            acceptedFiles: ".SC2Replay",
+            maxFiles: 100,
 
-      <script src="{% static 'main/js/dropzone.js' %}"></script>
-      <script type="text/javascript">
-          function exampleReplay() {
-            $.ajax({url: "/results/22", success: function(result){
-              $(result).hide().prependTo("#results").slideDown(1000);
-            }});
-          }
+            init: function() {
+              this.on("addedfile", function(file) {
+                console.log("hello");
+              });
 
-          Dropzone.options.myDropzone = {
-
-              // Prevents/enables Dropzone from uploading dropped files immediately
-              autoProcessQueue : true,
-              maxFilesize: 2,
-              dictDefaultMessage: "Drag *.SC2Replay file here",
-              acceptedFiles: ".SC2Replay",
-              maxFiles: 100,
-
-              init: function() {
-                this.on("addedfile", function(file) {
-                  console.log("hello");
-                });
-
-                this.on("success", function(file, response) {
-                  console.log(file);
-                  console.log(response);
-                  // results_block.appendChild(div);
-                  $(response).hide().prependTo("#results").slideDown(1000);
-                });
-              }
-          };
-      </script>
-      <style>
-      a {
-        color: rgba(0,0,0,.54);
-        text-decoration: none; /* no underline */
-      }
-      .demo-card-wide.mdl-card {
-        width: 70%;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 5px;
-      }
-      .demo-card-wide > .mdl-card__title {
-        color: #fff;
-        height: 176px;
-        background: url('http://www.hdwallpapers.in/walls/starcraft_2_heart_of_the_swarm-HD.jpg') center / cover;
-      }
-      .demo-card-wide > .mdl-card__menu {
-        color: #fff;
-      }
-      #guess {
-        color: green;
-        font-weight: bold;
-      }
-      #welcome {
-        align-items: center;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .player_cell {
-        cursor: pointer;
-      }
-      .mdl-cell {
-        align-self: baseline;
-      }
-      .dropzone {
-        border-radius: 5px;
-        border: 2px rgb(63,81,181) dashed;
-        position: fixed;
-        width: 100%;
-        z-index: 1000000;
-      }
-      .dz-message {
-        font-weight: bold;
-        font-size: 2em;
-      }
-      #results {
-        margin-top: 150px;
-      }
-      body {
-        background: #fafafa;
-      }
-      </style>
-
-        <!-- IMPORTANT enctype attribute! -->
-        <div>
+              this.on("success", function(file, response) {
+                console.log(file);
+                console.log(response);
+                // results_block.appendChild(div);
+                $(response).hide().prependTo("#results").slideDown(1000);
+              });
+            }
+        };
+        </script>
         <form class="dropzone" action="{% url "main:home" %}" method="post" enctype="multipart/form-data" id="myDropzone">
             {% csrf_token %}
         </form>
-        shhhhh we're bad at html
-        </div>
-
         <div id="results">
           <div id="welcome">
-
                 <!-- WELCOME CARD -->
                 <br>
                 <div class="animated zoomIn demo-card-wide mdl-card mdl-shadow--2dp">
@@ -133,10 +67,7 @@
                   </div>
                 </div>
                 <br>
-
           </div>
-          {% block results %} {% endblock %}
         </div>
-
     </body>
 </html>

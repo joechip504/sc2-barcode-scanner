@@ -35,7 +35,7 @@ def results(request, replay_id):
 
 	if not response or not summary_info:
 		context = {
-			'error'     : 'unable to process file',
+			'error'     : 'sry',
 			'file_name' : replay.file.name
 		}
 		return render(
