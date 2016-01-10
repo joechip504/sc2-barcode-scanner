@@ -33,16 +33,21 @@ def results(request, replay_id):
 	response 		= API.guess_from_ladder_replay(replay.file.name)
 	summary_info 	= API.get_summary_info(replay.file.name)
 
-	from pprint import pprint
-	pprint(summary_info)
-
-	if not response:
-		return HttpResponse('Problem processing file')
+	if not response or not summary_info:
+		context = {
+			'error'     : 'sry',
+			'file_name' : replay.file.name
+		}
+		return render(
+			request,
+			'main/upload_error.djhtml',
+			context,
+			)
 
 	context = {
 		'response' 		: response,
 		'summary_info'  : summary_info,
-		'match_title' 	: ' vs. '.join(response.keys())
+		'match_title' 	: ' vs. '.join(response.keys()),
 	}
 
 	return render(request, 'main/results.djhtml', context)

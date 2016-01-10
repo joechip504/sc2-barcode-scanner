@@ -1,0 +1,55 @@
+a {
+  color: rgba(0,0,0,.54);
+  text-decoration: none; /* no underline */
+}
+.demo-card-wide.mdl-card {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+}
+.demo-card-wide > .mdl-card__title {
+  color: #fff;
+  height: 176px;
+  background: url('http://www.hdwallpapers.in/walls/starcraft_2_heart_of_the_swarm-HD.jpg') center / cover;
+}
+.demo-card-wide > .mdl-card__menu {
+  color: #fff;
+}
+#guess {
+  color: green;
+  font-weight: bold;
+}
+#welcome {
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.player_cell {
+  cursor: pointer;
+}
+.mdl-cell {
+  align-self: baseline;
+}
+.dropzone {
+  border-radius: 5px;
+  border: 2px rgb(63,81,181) ridge;
+  position: fixed;
+  z-index: 1000000;
+  height: 180px;
+  max-height: 180px;
+  overflow: auto;
+  margin: 1%;
+  width: 98%;
+}
+.dz-message {
+  font-weight: bold;
+  font-size: 2em;
+}
+#results {
+  position: relative;
+  top: 200px;
+}
+body {
+  background: #fafafa;
+}

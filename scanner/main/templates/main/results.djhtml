@@ -8,22 +8,26 @@
       {% for player, candidates in response.items %}
       <div class="mdl-cell mdl-cell--6-col mdl-cell--middle">
         <!-- Player Results Table -->
+        <h3>{{player}}</h3>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <thead>
             <tr>
-              <th class="mdl-data-table__cell--non-numeric">{{player}}</th>
+              <th class="mdl-data-table__cell--non-numeric">Player</th>
               <th>%</th>
+              <th>Sample Size</th>
             </tr>
           </thead>
           <tbody>
-          	{% for confidence, player_guess in candidates %}
+          	{% for p in candidates %}
             <tr>
-              {% if confidence > 90 %}
-              <td class="mdl-data-table__cell--non-numeric guess_row" id="guess">{{player_guess}}</td>
-              <td id="guess">{{confidence}}</td>
+              {% if p.confidence > 90  and p.sample_size > 10 %}
+              <td class="mdl-data-table__cell--non-numeric player_cell"><a href="{{p.url}}" id="guess" target="_blank">{{p.name}}</a></td>
+              <td id="guess">{{p.confidence}}</td>
+              <td id="guess">{{p.sample_size}}</td>
               {% else %}
-              <td class="mdl-data-table__cell--non-numeric guess_row">{{player_guess}}</td>
-              <td>{{confidence}}</td>
+              <td class="mdl-data-table__cell--non-numeric player_cell"><a href="{{p.url}}" target="_blank">{{p.name}}</a></td>
+              <td>{{p.confidence}}</td>
+              <td>{{p.sample_size}}</td>
               {% endif %}
             </tr>
             {% endfor %}
@@ -34,6 +38,7 @@
     </div>
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--12-col mdl-cell--middle">
+        <h3>Match Details</h3>
         <p><strong>Winner:</strong> {{summary_info.winner}}</p>
         <p><strong>Map:</strong> {{summary_info.map_name}}</p>
         <p><strong>Time Elapsed:</strong> {{summary_info.length}}</p>
