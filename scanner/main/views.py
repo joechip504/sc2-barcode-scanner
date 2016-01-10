@@ -48,7 +48,6 @@ def results(request, replay_id):
 		'response' 		: response,
 		'summary_info'  : summary_info,
 		'match_title' 	: ' vs. '.join(response.keys()),
-		'file_name' : replay.file.name
 	}
 
 	return render(request, 'main/results.djhtml', context)

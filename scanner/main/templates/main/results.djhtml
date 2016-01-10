@@ -42,7 +42,6 @@
         <p><strong>Winner:</strong> {{summary_info.winner}}</p>
         <p><strong>Map:</strong> {{summary_info.map_name}}</p>
         <p><strong>Time Elapsed:</strong> {{summary_info.length}}</p>
-        <p><strong>File Name:</strong> {{file_name}}</p>
       </div>
     </div>
   </div>
