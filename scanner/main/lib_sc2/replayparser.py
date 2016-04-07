@@ -27,6 +27,7 @@ class ReplayParser(object):
 		'''
 		Must be LOTV replay with 2 players
 		'''
+		# return True
 		return all((
 			len(replay.players) == 2, 
 			))

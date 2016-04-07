@@ -11,6 +11,7 @@ from .tree import Node, ReplayKDTree
 import statistics
 from collections import defaultdict
 import math
+from main.models import Player
 
 class SC2BarcodeScannerAPI(object):
 
@@ -65,16 +66,8 @@ class SC2BarcodeScannerAPI(object):
 			def mean(v):
 				return float('{0:.2f}'.format(statistics.mean(v)))
 
-
-			def manhattan_distance(v1, v2):
-				dist = sum(abs(a-b) for a,b in zip(v1,v2))
-				if v1.player_race != v2.player_race:
-					dist += 1000
-				return dist
-
 			def euclid_distance(v1 ,v2):
 				dist = math.sqrt(sum([(i-j)**2 for i, j in zip(v1, v2)]))
-				print(dist)
 				if v1.player_race != v2.player_race:
 					dist += 10000
 				return dist
@@ -91,7 +84,7 @@ class SC2BarcodeScannerAPI(object):
 			node 	   = Node(**node_kwargs)
 			# candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance)]
 
-			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance) if float(dist) < 1000.0]
+			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = euclid_distance) if float(dist) < 1000.0]
 			# candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = euclid_distance) if dist < 10000]
 
 			candidate_dict 		= defaultdict(list)
@@ -101,20 +94,6 @@ class SC2BarcodeScannerAPI(object):
 
 			# Make sure at least 3 replays in this cluster match a player
 			candidate_dict = {k : v for k,v in candidate_dict.items() if len(v) > 2}
-
-			class Player(object):
-				def __init__(self, percent_match, sample_size, url, name):
-					self.name = name
-					self.confidence = percent_match
-					self.url = url
-					self.sample_size = sample_size
-
-				def __lt__(self, other):
-					# return self.confidence < other.confidence
-					return self.sample_size < other.sample_size
-
-				def __repr__(self):
-					return self.url
 
 			player_objs = []
 
