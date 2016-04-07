@@ -11,7 +11,7 @@ from .tree import Node, ReplayKDTree
 import statistics
 from collections import defaultdict
 import math
-from main.models import Player
+from .player import Player
 
 class SC2BarcodeScannerAPI(object):
 
@@ -93,7 +93,7 @@ class SC2BarcodeScannerAPI(object):
 				candidate_dict[node.player_name].append(node)
 
 			# Make sure at least 3 replays in this cluster match a player
-			candidate_dict = {k : v for k,v in candidate_dict.items() if len(v) > 2}
+			candidate_dict = {k : v for k,v in candidate_dict.items() if len(v) > 2}	
 
 			player_objs = []
 
