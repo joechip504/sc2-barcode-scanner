@@ -29,7 +29,8 @@ class ReplayParser(object):
 		'''
 		# return True
 		return all((
-			len(replay.players) == 2, 
+			len(replay.players) == 2,
+			replay.expansion == 'LotV', 
 			))
 
 	def extract_hotkey_info(self, replay, player):
