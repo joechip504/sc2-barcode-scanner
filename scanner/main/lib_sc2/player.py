@@ -5,9 +5,18 @@ class Player(object):
 		self.url = url
 		self.sample_size = sample_size
 
+	def likely_candidate(self):
+		return (self.confidence > 95 and self.sample_size > 10) or self.confidence > 99
+
 	def __lt__(self, other):
 		# return self.confidence < other.confidence
-		return self.sample_size < other.sample_size
+		if (self.likely_candidate() and other.likely_candidate()):
+			return self.confidence < other.confidence
+
+		elif other.likely_candidate():
+			return True
+
+		return self.confidence < other.confidence
 
 	def __repr__(self):
 		return self.url

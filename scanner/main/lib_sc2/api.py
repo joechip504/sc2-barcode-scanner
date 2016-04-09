@@ -61,7 +61,7 @@ class SC2BarcodeScannerAPI(object):
 			}
 
 			def gaussian(v1, v2):
-				   	return float('{0:.2f}'.format(100 - sum([(i-j)**2 for i,j in zip(v1, v2)])**.5))
+				return float('{0:.2f}'.format(100 - sum([(i-j)**2 for i,j in zip(v1, v2)])**.5))
 
 			def mean(v):
 				return float('{0:.2f}'.format(statistics.mean(v)))
@@ -81,13 +81,13 @@ class SC2BarcodeScannerAPI(object):
 				denominator = 1 if denominator == 0 else denominator
 				return round(numerator/float(denominator),3)
  
-			node 	   = Node(**node_kwargs)
+			node = Node(**node_kwargs)
 			# candidates = [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = manhattan_distance)]
 
-			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = euclid_distance) if float(dist) < 1000.0]
+			candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 100, dist = euclid_distance) if float(dist) < 1000.0] #cosine?
 			# candidates_by_race 	= [node.data for node, dist in self.tree.search_knn(node, k = 5, dist = euclid_distance) if dist < 10000]
 
-			candidate_dict 		= defaultdict(list)
+			candidate_dict = defaultdict(list)
 
 			for node in candidates_by_race:
 				candidate_dict[node.player_name].append(node)
@@ -109,18 +109,8 @@ class SC2BarcodeScannerAPI(object):
 
 			neighbors[player.name] = sorted(player_objs, reverse = True)[:8]
 
-			# neighbors[player.name] = sorted([(
-			# 	mean(percentages), p, len(percentages)
-			# 	) for p, percentages in candidate_dict.items()
-			# 	], reverse = True)[:5]
-
-			# neighbors[player.name] = sorted([(
-			# 		gaussian(hotkey_info, node.hotkey_info), node.player_name
-			# 		) for node in candidates
-			# 	], reverse = True)[:5]
-
-		from pprint import pprint
-		pprint(neighbors)
+		# from pprint import pprint
+		# pprint(neighbors)
 		return neighbors
 
 	def get_players(self, replay_file_path):
@@ -180,11 +170,3 @@ class SC2BarcodeScannerAPI(object):
 	            if replay.endswith('.SC2Replay'):
 	                replay_file_path = '/'.join([dirpath, replay])
 	                self.add_tournament_replay(replay_file_path)
-
-# if __name__ == '__main__':
-	## will need to run from django shell to update from now on
-	# constants.PATH_TREE_NODES = constants.PATH_TREE_NODES_LOCAL
-	# constants.PATH_REPLAY_IDS = constants.PATH_REPLAY_IDS_LOCAL
-	# SC2BarcodeScannerAPI().add_tournament_replay('test.SC2Replay')
-	# print(SC2BarcodeScannerAPI().guess_from_ladder_replay('test.SC2Replay'))
-	# SC2BarcodeScannerAPI().add_tournament_replay_directory('../static/main/tournament_replays/')

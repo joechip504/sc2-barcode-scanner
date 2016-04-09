@@ -27,11 +27,10 @@ class ReplayParser(object):
 		'''
 		Must be LOTV replay with 2 players
 		'''
-		# return True
 		return all((
 			len(replay.players) == 2,
 			replay.expansion == 'LotV', 
-			))
+			))	
 
 	def extract_hotkey_info(self, replay, player):
 		hotkey_data = [0] * 10
@@ -46,15 +45,16 @@ class ReplayParser(object):
 			hotkey_data[event.control_group] += 1
 
 		for i in range(len(hotkey_data)):
-			seconds = 1 if replay.real_length.total_seconds() == 0 else replay.length.total_seconds()
-			hotkey_data[i] /= (seconds / 60)
-			hotkey_data[i] = int(hotkey_data[i])
+			seconds = 1 if replay.real_length.total_seconds() == 0 else replay.real_length.total_seconds()
+			hotkey_data[i] /= seconds
+			hotkey_data[i] = float(hotkey_data[i]) * 100
 
 		return hotkey_data
 
 	def load_replay(self, replay_file_path):
 		try:
 			replay = sc2reader.load_replay(replay_file_path, load_level = 4)
+			
 		except Exception as e:
 			self.logger.warning(self.WARNING_SC2READER_LOAD.format(replay_file_path, str(e)))
 			return None
