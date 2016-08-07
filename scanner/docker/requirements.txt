@@ -1,0 +1,5 @@
+dill==0.2.4
+Django==1.9
+mpyq==0.2.5
+-e git://github.com/ggtracker/sc2reader.git@upstream#egg=sc2reader
+wheel==0.24.0
