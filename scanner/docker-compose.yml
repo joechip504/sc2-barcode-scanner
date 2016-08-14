@@ -4,10 +4,10 @@ services:
     image: postgres
   scanner:
     build: docker
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: bash -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
       - "80:8000"
     depends_on:
-      - db
+      - db  
